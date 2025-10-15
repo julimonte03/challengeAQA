@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // usuarios hardcodeados 
-const USERS = { testuser: 'Password123' };
+const USERS = { testuser: 'Password123', testuser2: 'Password2' };
 
 router.post('/login', (req, res) => {
   const { username, password } = req.body || {};
