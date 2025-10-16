@@ -1,14 +1,43 @@
-require('dotenv').config(); // carga variables de .env en process.env
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
 const authRoutes = require('./routes/auth');
 const messagesRoutes = require('./routes/messages');
+const Message = require('./models/Message');
 
 const app = express();
-app.use(cors());
-app.use(express.json()); // parsea JSON
+
+// Configuración de CORS explícita para React
+app.use(cors({
+  origin: 'http://localhost:5173', // origen del frontend
+  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+  credentials: true
+}));
+
+// Parseo de JSON
+app.use(express.json());
+
+// Logger de todas las requests
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
+
+// Endpoint para resetear la base (Cypress)
+app.post("/test/reset", async (req, res) => {
+  const messages = req.body.messages || [];
+  console.log("Reset messages:", messages); // 👈 log para ver mensajes que llegan
+  try {
+    await Message.deleteMany({});
+    await Message.insertMany(messages);
+    res.status(200).send({ ok: true });
+  } catch (err) {
+    console.error("Error al resetear mensajes:", err);
+    res.status(500).send({ ok: false, message: 'Error reset messages' });
+  }
+});
 
 // Rutas con prefijo /api
 app.use('/api', authRoutes);
@@ -21,8 +50,6 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     console.log('Conectado a MongoDB');
     const PORT = process.env.PORT || 4000;
     app.listen(PORT, () => console.log(`Backend escuchando en http://localhost:${PORT}`));
-    
-    
   })
   .catch(err => {
     console.error('Error conectando a MongoDB', err);
