@@ -18,19 +18,19 @@ export default function Login({ onLogin }) {
 });
 
       const data = await res.json();
-      console.log("Login response:", data); // 👈 log del backend
+      console.log("Login response:", data); // \\ log del backend
 
       if (res.ok && data.ok) {
         onLogin(data.user);
-        console.log("Login OK, navegando a /chat"); // 👈 log de éxito
+        console.log("Login OK, navegando a /chat"); // \\ log de éxito
         navigate('/chat');
       } else {
         setErr("Invalid credentials");
-        console.log("Login falló"); // 👈 log de error
+        console.log("Login falló"); // \\ log de error
       }
     } catch (error) {
       setErr('No se pudo conectar al servidor');
-      console.log("Error de conexión:", error); // 👈 log de error de fetch
+      console.log("Error de conexión:", error); // \\ log de error de fetch
     }
   };
 

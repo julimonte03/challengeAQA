@@ -28,7 +28,7 @@ app.use((req, res, next) => {
 // Endpoint para resetear la base (Cypress)
 app.post("/test/reset", async (req, res) => {
   const messages = req.body.messages || [];
-  console.log("Reset messages:", messages); // 👈 log para ver mensajes que llegan
+  console.log("Reset messages:", messages); //  log para ver mensajes que llegan
   try {
     await Message.deleteMany({});
     await Message.insertMany(messages);

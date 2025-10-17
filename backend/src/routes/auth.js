@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 router.post("/login", (req, res) => {
-  console.log("Login request body:", req.body); // 👈 log del request
+  console.log("Login request body:", req.body); //  log del request
 
   const { username, password } = req.body;
   if (username === "testuser" && password === "Password123") {

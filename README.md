@@ -1,74 +1,123 @@
-El usuario abre la página React (frontend).
+-AQA Challenge - Chat Room App
 
-En Login, al hacer submit, el frontend hace POST http://localhost:4000/api/login.
+-Overview
 
-El backend (Express) recibe la petición, valida credenciales (hardcode), y devuelve { ok: true, user, token }.
+This project is a simple Chat Room App where users can log in and send messages in real time.  
 
-El frontend guarda el user en memoria (estado) y muestra la vista Chat.
+---
 
-En Chat, al abrir la vista, el frontend hace GET http://localhost:4000/api/messages para obtener la historia.
+-Features
 
-Al enviar un mensaje, frontend hace POST /api/messages con { user, text }. El backend lo guarda en MongoDB (colección messages) y retorna el objeto guardado. Frontend lo agrega a la lista.
+- User login and logout  
+- Send and display chat messages  
+- Input validation for empty messages  
+- Backend and frontend integration  
+- Automated end-to-end testing with Cypress  
+- HTML reporting with Mochawesome  
 
-Agregado -> el frontend está haciendo poll cada 3s para actualizar mensajes en real time
--------------------------------------------------------------------------------------------
+---
 
-Buenas practicas:
+-Tech Stack
 
-Endpoints con prefijo /api: separación entre frontend y API.
+- Frontend: React + React Router  
+- Backend: Node.js + Express  
+- Database: MongoDB  
+- Testing: Cypress + Cucumber + Mochawesome Reporter  
 
-Modelo Mongoose: estructura clara de datos; fácil de testear.
+---
 
-data-cy en inputs/buttons: identifica elementos para tests E2E sin romper con cambios de estilos.
+-Getting Started
 
-Logs y manejo simple de errores: facilita debugging durante la demo.
+-Installation
+
+---------------------GitHub Cloning-------------------------------
+
+git clone https://github.com/julimonte03/challengeAQA.git
+cd aqa-challenge
+
+---------------------Running the App-------------------------------
+Start the backend:
+
+cd backend
+npm install
+
+aqa-challenge\backend -> run        npm start
+
+---------------------Start the frontend (in another terminal)-------------------------------
+
+cd frontend
+npm install
+
+aqa-challenge\frontend -> run      npm run dev
 
 
 --------------------------------------------------------------------------------------------
 
-Cypress + Cucumber preprocessor (BDD):
+The app will be available at http://localhost:5173
+The backend runs at http://localhost:4000
 
-Tener feature files legibles para mostrar en la entrevista.
-
-Tests E2E veloces y estables.
-
-Fácil integración con CI y generación de reportes.
----------------------------------------------------------------------------------
-
-TESTS:
-
-Login success (login.feature) ✅
-
-Login fail (login.feature) ✅
-
-Login validation missing fields (test de UI)
-
-Send single message (chat.feature) ✅
-
-See seeded messages in history (chat.feature) ✅
-
-Reject empty message (chat.feature) ✅
-
-Send multiple messages and order is correct
-
-Long message handling (envío de string muy largo)
-
-Special characters / XSS escape (mensaje con <script>)
-
-UI elements present (input, button, header) — smoke test
-
-Unauthorized send (API returns 401 when no token) — backend API test
-
-Backend persists messages (API test: POST then GET)
-
-Concurrent messages (simulate 2 users via API + UI)
-
-Error handling: backend returns 500 => UI shows error
-
-REPORTES Y COBERTURA: 
+---------------------Running tests (in another terminal)-------------------------------
 
 cd aqa
-npm run test
+npm install
+npm install --save-dev cypress @badeball/cypress-cucumber-preprocessor @bahmutov/cypress-esbuild-preprocessor mochawesome mochawesome-merge mochawesome-report-generator dotenv
 
-generará archivos JSON en aqa/reports/mochawesome. Para obtener HTML también podés usar herramientas para convertir JSON a HTML (mochawesome hace esto si configuras html=true). Ajusta el script si querés HTML directo:
-"test": "cypress run --reporter mochawesome --reporter-options reportDir=reports/mochawesome,overwrite=false,html=true,json=true"
+
+
+To execute the automated tests:
+
+aqa-challenge\aqa -> run           npm run test
+
+to see the tests running in real time:
+                     run           npm run cypress:open
+
+
+This will run all login and chat feature tests and generate reports inside
+
+---------------------Implemented and Planned Tests-------------------------------
+
+Some tests were planned but not implemented due to time constraints.
+The test infrastructure is fully prepared for easy future additions:
+
+
+| Module  | Test Case                      | Status      
+| ------- | ------------------------------ | --------- 
+| Login   | Valid credentials              |done      |
+| Login   | Invalid credentials            |done      |
+| Login   | Empty fields                   |done      |
+| Chat    | Send valid message             |done      |
+| Chat    | Empty message                  |done      |
+| Chat    | Very long message              |(planned) |
+| Chat    | Load previous messages         |(planned) |
+| Chat    | Refresh and keep messages      |(planned) |
+| Chat    | Two-user interaction           |(planned) |
+| Chat    | Send multiple messages quickly |(planned) |
+| Backend | Validate message saved in DB   |(planned) |
+| Backend | Reject invalid login           |done      |
+| Backend | Accept valid login             |done      |
+| Backend | Reset DB via `/test/reset`     |(planned) |
+
+
+
+---------------------How to use-------------------------------
+
+Open the app in your browser.
+
+Log in with a test user (for example: testuser / Password123).
+
+Send a message and check that it appears in the chat.
+
+---------------------Run Everything with One Command -------------------------------
+backend + frontend + tests using concurrently
+
+
+\aqa-challenge -> run        npm install -D concurrently
+                  run         npm run all
+
+                  
+
+
+
+
+
+
